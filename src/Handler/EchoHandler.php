@@ -9,22 +9,22 @@
  */
 declare(strict_types=1);
 
-namespace Phoole\Logger\Processor;
+namespace Phoole\Logger\Handler;
 
 use Phoole\Logger\Entry\LogEntryInterface;
 
 /**
- * ProcessorInterface
+ * echo log message to STDOUT
  *
  * @package Phoole\Logger
  */
-interface ProcessorInterface
+class EchoHandler extends HandlerAbstract
 {
     /**
-     * Process the log entry
-     *
-     * @param  LogEntryInterface
-     * @return void
+     * {@inheritDoc}
      */
-    public function process(LogEntryInterface $entry);
+    protected function write(LogEntryInterface $entry)
+    {
+        echo $this->getFormatter()->format($entry);
+    }
 }

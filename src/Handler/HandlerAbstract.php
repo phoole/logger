@@ -57,7 +57,7 @@ abstract class HandlerAbstract implements HandlerInterface, FormatterAwareInterf
 
     /**
      * Is this handler handling this log ?
-     * 
+     *
      * @return bool
      */
     protected function isHandling(): bool
@@ -66,24 +66,10 @@ abstract class HandlerAbstract implements HandlerInterface, FormatterAwareInterf
     }
 
     /**
-     * Get EOL char base on the platform WIN or UNIX
-     *
-     * @return string
-     */
-    protected function getEol(): string
-    {
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            return "\r\n";
-        } else {
-            return "\n";
-        }
-    }
-
-    /**
      * Close the handler
      */
     protected function close()
-    {  
+    {
     }
 
     /**

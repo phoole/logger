@@ -17,7 +17,7 @@ use Phoole\Logger\Formatter\FormatterInterface;
 
 /**
  * log to a terminal
- * 
+ *
  * @package Phoole\Logger
  */
 class TerminalHandler extends StreamHandler

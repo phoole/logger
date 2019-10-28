@@ -11,15 +11,18 @@ declare(strict_types=1);
 
 namespace Phoole\Logger\Entry;
 
+use Psr\Log\InvalidArgumentException;
 use Phoole\Logger\Processor\ProcessorInterface;
 
 /**
  * Log message
- *  
+ *
  * @package Phoole\Logger
  */
 class LogEntry implements LogEntryInterface
 {
+    use LogLevelTrait;
+
     /**
      * @var string
      */
@@ -36,26 +39,19 @@ class LogEntry implements LogEntryInterface
     protected $context;
 
     /**
-     * processor class name
-     * 
-     * @var array
-     */
-    protected $processors = [];
-
-    /**
      * @param  string $level
      * @param  string $message
      * @param  array $context
      */
-    public function __construct(string $message = '',  array $context = [])
+    public function __construct(string $message = '', array $context = [])
     {
         if (!empty($message)) {
             $this->message = $message;
         }
         $this->context = $context;
 
-        foreach ($this->processors as $processorClass) {
-            (new $processClass)->process($this);
+        foreach ($this->getProcessors() as $processorClass) {
+            (new $processorClass())->process($this);
         }
     }
 
@@ -72,7 +68,7 @@ class LogEntry implements LogEntryInterface
      */
     public function getLevel(): string
     {
-        return $this->level;
+        return (string) $this->level;
     }
 
     /**
@@ -86,17 +82,30 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function setLevel(string $level)
+    public function setLevel(string $level): LogEntryInterface
     {
+        if (!isset($this->convert[$level])) {
+            throw new InvalidArgumentException("unknown log level");
+        }
         $this->level = $level;
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setContext(array $context)
+    public function setContext(array $context): LogEntryInterface
     {
         $this->context = $context;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProcessors(): array
+    {
+        return array();
     }
 
     /**
@@ -116,8 +125,10 @@ class LogEntry implements LogEntryInterface
     {
         $replace = array();
         foreach ($context as $key => $val) {
-            if (!is_array($val) &&
-                (!is_object($val) || method_exists($val, '__toString'))
+            if (
+                !is_array($val) &&
+                (!is_object($val) ||
+                method_exists($val, '__toString'))
             ) {
                 $replace['{' . $key . '}'] = $val;
             }

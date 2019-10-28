@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phoole\Logger\Handler;
 
 use Phoole\Logger\Formatter\FormatterInterface;
+use Phoole\Logger\Entry\LogEntryInterface;
 
 /**
  * @package Phoole\Logger
@@ -43,7 +44,7 @@ class StreamHandler extends HandlerAbstract
     protected function openStream($path)
     {
         if (is_string($path)) {
-            if (false !== strpos($path, '://')) {
+            if (false === strpos($path, '://')) {
                 $path = 'file://' . $path;
             }
             return fopen($path, 'a');
@@ -71,7 +72,7 @@ class StreamHandler extends HandlerAbstract
     protected function write(LogEntryInterface $entry)
     {
         if ($this->stream) {
-            $msg = $this->getFormatter()->format($entry) . $this->getEol();
+            $msg = $this->getFormatter()->format($entry);
             flock($this->stream, LOCK_EX);
             fwrite($this->stream, $msg);
             flock($this->stream, LOCK_UN);

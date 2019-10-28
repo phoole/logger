@@ -15,19 +15,19 @@ use Phoole\Logger\Processor\MemoryProcessor;
 
 /**
  * Log system related message.
- * 
+ *
  * ```php
  * $log = new Logger('MyApp');
- * 
+ *
  * $log->addHandler(
  *     new LogfileHandler('system.log'),
  *     LogLevel::INFO,
  *     SystemLog::class
  * );
- * 
+ *
  * $log->info(new SystemLog());
  * ```
- * 
+ *
  * @package Phoole\Logger
  */
 class SystemLog extends LogEntry
@@ -36,14 +36,15 @@ class SystemLog extends LogEntry
      * default message template
      * @var string
      */
-    protected $message = '{memory_used} memory used, peak usage is {memory_peak}';
+    protected $message = '{memory_used}M memory used, peak usage is {memory_peak}M';
 
     /**
-     * processors
-     * 
-     * @var array
+     * {@inheritDoc}
      */
-    protected $processors = [
-        MemoryProcessor::class
-    ];
+    public function getProcessors(): array
+    {
+        return array_merge(parent::getProcessors(), [
+            MemoryProcessor::class
+        ]);
+    }
 }

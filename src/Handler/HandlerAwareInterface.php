@@ -21,8 +21,8 @@ use Phoole\Logger\Entry\LogEntryInterface;
 interface HandlerAwareInterface
 {
     /**
-     * Add a handler 
-     * 
+     * Add a handler
+     *
      * @param  HandlerInterface $handler
      * @param  string $level                level to handle
      * @param  string $entryClass           the log entry class/interface to handle
@@ -38,8 +38,8 @@ interface HandlerAwareInterface
     ): HandlerAwareInterface;
 
     /**
-     * Get handlers handling $level and $entry type 
-     * 
+     * Get handlers handling $level and $entry type
+     *
      * @param  LogEntryInterface $entry
      * @return \Traversable
      */

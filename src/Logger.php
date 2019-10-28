@@ -13,6 +13,8 @@ namespace Phoole\Logger;
 
 use Psr\Log\LoggerTrait;
 use Psr\Log\LoggerInterface;
+use Phoole\Logger\Entry\LogEntry;
+use Phoole\Logger\Entry\LogEntryInterface;
 use Phoole\Logger\Handler\HandlerAwareTrait;
 use Phoole\Logger\Handler\HandlerAwareInterface;
 
@@ -43,7 +45,7 @@ class Logger implements LoggerInterface, HandlerAwareInterface
         $entry = $this->initEntry($message, $level, $context);
         
         // handle the entry
-        foreach($this->getHandlers($entry) as $handler) {
+        foreach ($this->getHandlers($entry) as $handler) {
             $entry = $handler->handle($entry);
         }
     }
@@ -64,9 +66,9 @@ class Logger implements LoggerInterface, HandlerAwareInterface
 
         $this->setChannel($context);
 
-        $entry->setLevel($level);
-        $entry->setContext(array_merge($entry->getContext(), $context));
-        return $entry;
+        return $entry
+            ->setLevel($level)
+            ->setContext(array_merge($entry->getContext(), $context));
     }
 
     /**
@@ -74,7 +76,7 @@ class Logger implements LoggerInterface, HandlerAwareInterface
      */
     protected function setChannel(array &$context)
     {
-        if (!isset($context['channel'])) {
+        if (!isset($context['__channel'])) {
             $context['__channel'] = $this->channel;
         }
     }

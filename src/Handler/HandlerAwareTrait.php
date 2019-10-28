@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phoole\Logger\Handler;
 
 use Psr\Log\LogLevel;
+use Phoole\Logger\Entry\LogLevelTrait;
 use Phoole\Logger\Entry\LogEntryInterface;
 use Phoole\Base\Queue\UniquePriorityQueue;
 
@@ -22,20 +23,7 @@ use Phoole\Base\Queue\UniquePriorityQueue;
  */
 trait HandlerAwareTrait
 {
-    /**
-     * convert to numirc values
-     * @var array
-     */
-    protected $convert = [
-        LogLevel::DEBUG     => 100,
-        LogLevel::INFO      => 200,
-        LogLevel::NOTICE    => 300,
-        LogLevel::WARNING   => 400,
-        LogLevel::ERROR     => 500,
-        LogLevel::CRITICAL  => 600,
-        LogLevel::ALERT     => 700,
-        LogLevel::EMERGENCY => 800
-    ];
+    use LogLevelTrait;
 
     /**
      * queue for the handlers
@@ -85,7 +73,7 @@ trait HandlerAwareTrait
 
     /**
      * return TRUE if can handle the entry level
-     * 
+     *
      * @param  string $entryLevel
      * @param  string $handlerLevel
      * @return bool

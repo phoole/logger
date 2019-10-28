@@ -22,7 +22,7 @@ interface FormatterInterface
 {
     /**
      * convert to formatted message
-     * 
+     *
      * @param  LogEntryInterface $entry
      * @return string
      */

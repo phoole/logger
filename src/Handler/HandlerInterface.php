@@ -22,7 +22,7 @@ interface HandlerInterface
 {
     /**
      * Handle the entry and return it
-     * 
+     *
      * @param  LogEntryInterface
      * @return LogEntryInterface
      */

@@ -88,7 +88,7 @@ class AnsiFormatter extends DefaultFormatter
     public function format(LogEntryInterface $entry): string
     {
         $text = parent::format($entry);
-        return $this->addColor($entry->getLevel, $text);
+        return $this->addColor($entry->getLevel(), $text);
     }
 
     /**

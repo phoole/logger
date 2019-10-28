@@ -13,7 +13,7 @@ namespace Phoole\Logger\Processor;
 
 /**
  * MemoryProcessor
- * 
+ *
  * @package Phoole\Logger
  */
 class MemoryProcessor extends ProcessorAbstract
@@ -23,8 +23,8 @@ class MemoryProcessor extends ProcessorAbstract
      */
     protected function updateContext(array $context): array
     {
-        $context['memory_used'] = memory_get_usage(true);
-        $context['memory_peak'] = memory_get_peak_usage(true);
+        $context['memory_used'] = number_format(memory_get_usage(true) / 1048575, 2);
+        $context['memory_peak'] = number_format(memory_get_peak_usage(true) / 1048575, 2);
         return $context;
     }
 }

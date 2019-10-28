@@ -15,14 +15,14 @@ use Phoole\Logger\Formatter\FormatterInterface;
 
 /**
  * log to a file
- * 
+ *
  * @package Phoole\Logger
  */
 class LogfileHandler extends StreamHandler
 {
     /**
      * file rotation type
-     * 
+     *
      * @var    const
      */
     const ROTATE_NONE =  0; // do not rotate
@@ -59,7 +59,7 @@ class LogfileHandler extends StreamHandler
     protected function checkPath(string $path)
     {
         try {
-            $dir = dirname(realpath($path));
+            $dir = dirname($path);
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
             }
@@ -99,7 +99,7 @@ class LogfileHandler extends StreamHandler
      */
     protected function rotateByDate(string $path, string $format = 'Ymd'): bool
     {
-        $time = filectime($path);
+        $time = filemtime($path);
         if ($time < strtotime('today')) {
             return rename($path, $path . '_' . date($format, $time));
         } else {

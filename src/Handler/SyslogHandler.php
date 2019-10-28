@@ -17,7 +17,7 @@ use Phoole\Logger\Formatter\FormatterInterface;
 
 /**
  * log to syslog on UNIX type system
- * 
+ *
  * @package Phoole\Logger
  */
 class SyslogHandler extends HandlerAbstract
@@ -74,7 +74,7 @@ class SyslogHandler extends HandlerAbstract
     protected function write(LogEntryInterface $entry)
     {
         $context = $entry->getContext();
-        $ident = $context['channel'] ?? 'LOG';
+        $ident = $context['__channel'] ?? 'LOG';
 
         if (!openlog($ident, $this->logopts, $this->facility)) {
             throw new \LogicException("openlog() failed");

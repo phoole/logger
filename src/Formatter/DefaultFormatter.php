@@ -31,8 +31,22 @@ class DefaultFormatter implements FormatterInterface
         if (isset($context['__channel'])) {
             $mesg .= '[' . strtoupper($context['__channel']) . '] ';
         }
-        $mesg .= $entry;
+        $mesg .= $entry . $this->getEol();
 
         return  $mesg;
+    }
+   
+    /**
+     * Get EOL char base on the platform WIN or UNIX
+     *
+     * @return string
+     */
+    protected function getEol(): string
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return "\r\n";
+        } else {
+            return "\n";
+        }
     }
 }

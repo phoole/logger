@@ -11,9 +11,11 @@ declare(strict_types=1);
 
 namespace Phoole\Logger\Processor;
 
+use Phoole\Logger\Entry\LogEntryInterface;
+
 /**
  * ProcessorAbstract
- * 
+ *
  * @package Phoole\Logger
  */
 abstract class ProcessorAbstract implements ProcessorInterface
@@ -29,7 +31,7 @@ abstract class ProcessorAbstract implements ProcessorInterface
 
     /**
      * update info in the $context
-     * 
+     *
      * @param  array $context
      * @return array
      */
