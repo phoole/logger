@@ -2,7 +2,7 @@
     "name": "phoole/logger",
     "type": "library",
     "license": "Apache-2.0",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Simple & slim PSR-3 logger for PHP",
     "keywords": ["phoole", "library", "php", "logger", "psr-3", "swoole"],
     "authors": [
@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "phoole/base": "^1.0.19",
+        "phoole/base": "^1.0.20",
         "psr/log": "^1.0.1"
     },
     "require-dev": {

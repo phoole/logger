@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Phoole\Logger\Entry;
 
 use Psr\Log\InvalidArgumentException;
-use Phoole\Logger\Processor\ProcessorInterface;
 
 /**
  * Log message
@@ -39,7 +38,6 @@ class LogEntry implements LogEntryInterface
     protected $context;
 
     /**
-     * @param  string $level
      * @param  string $message
      * @param  array $context
      */
