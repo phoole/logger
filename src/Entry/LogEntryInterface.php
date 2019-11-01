@@ -43,18 +43,18 @@ interface LogEntryInterface
 
     /**
      * @param  string $level
-     * @return LogEntryInterface $this
+     * @return $this
      * @throws InvalidArgumentException
      */
-    public function setLevel(string $level): LogEntryInterface;
+    public function setLevel(string $level);
 
     /**
      * Set context
      *
      * @param  array $context
-     * @return LogEntryInterface $this
+     * @return $this
      */
-    public function setContext(array $context): LogEntryInterface;
+    public function setContext(array $context);
 
     /**
      * array of processor classname

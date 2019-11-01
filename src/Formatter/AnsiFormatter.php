@@ -70,13 +70,13 @@ class AnsiFormatter extends DefaultFormatter
      * @access  protected
      */
     protected $colors = array(
-        LogLevel::DEBUG     => [self::FGCOLOR_GRAY, '', ''],
-        LogLevel::INFO      => ['', '', ''],
-        LogLevel::NOTICE    => [self::FGCOLOR_BRIGHT_GREEN, '', ''],
-        LogLevel::WARNING   => [self::FGCOLOR_BRIGHT_YELLOW, '', ''],
-        LogLevel::ERROR     => [self::FGCOLOR_BRIGHT_RED, '', ''],
-        LogLevel::CRITICAL  => [self::FGCOLOR_BRIGHT_RED, '', self::DECO_UNDERLINE],
-        LogLevel::ALERT     => [self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, ''],
+        LogLevel::DEBUG => [self::FGCOLOR_GRAY, '', ''],
+        LogLevel::INFO => ['', '', ''],
+        LogLevel::NOTICE => [self::FGCOLOR_BRIGHT_GREEN, '', ''],
+        LogLevel::WARNING => [self::FGCOLOR_BRIGHT_YELLOW, '', ''],
+        LogLevel::ERROR => [self::FGCOLOR_BRIGHT_RED, '', ''],
+        LogLevel::CRITICAL => [self::FGCOLOR_BRIGHT_RED, '', self::DECO_UNDERLINE],
+        LogLevel::ALERT => [self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, ''],
         LogLevel::EMERGENCY => [self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, self::DECO_BLINK],
     );
 

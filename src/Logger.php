@@ -49,6 +49,7 @@ class Logger implements LoggerInterface, HandlerAwareInterface
     {
         // init the log entry
         $entry = $this->initEntry($message, $level, $context);
+
         /** @var HandlerInterface $handler */
         foreach ($this->getHandlers($entry) as $handler) {
             $entry = $handler->handle($entry);
@@ -69,6 +70,7 @@ class Logger implements LoggerInterface, HandlerAwareInterface
             $entry = new LogEntry($message);
         }
         $this->setChannel($context);
+
         return $entry
             ->setLevel($level)
             ->setContext(array_merge($entry->getContext(), $context));

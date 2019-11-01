@@ -74,7 +74,7 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function setLevel(string $level): LogEntryInterface
+    public function setLevel(string $level)
     {
         if (!isset($this->convert[$level])) {
             throw new InvalidArgumentException("unknown log level");
@@ -130,7 +130,7 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function setContext(array $context): LogEntryInterface
+    public function setContext(array $context)
     {
         $this->context = $context;
         return $this;

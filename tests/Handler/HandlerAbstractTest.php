@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Phoole\Logger\Formatter\DefaultFormatter;
-use Phoole\Logger\Formatter\AnsiFormatter;
-use Phoole\Logger\Handler\HandlerAbstract;
 use Phoole\Logger\Entry\LogEntry;
+use Phoole\Logger\Handler\HandlerAbstract;
+use Phoole\Logger\Formatter\AnsiFormatter;
 use Phoole\Logger\Entry\LogEntryInterface;
+use Phoole\Logger\Formatter\DefaultFormatter;
 
 class myHandler extends HandlerAbstract
 {
@@ -22,27 +22,8 @@ class myHandler extends HandlerAbstract
 class HandlerAbstractTest extends TestCase
 {
     private $obj;
+
     private $ref;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->obj = new myHandler();
-        $this->ref = new \ReflectionClass(get_class($this->obj));
-    }
-
-    protected function tearDown(): void
-    {
-        $this->obj = $this->ref = null;
-        parent::tearDown();
-    }
-
-    protected function invokeMethod($methodName, array $parameters = array())
-    {
-        $method = $this->ref->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($this->obj, $parameters);
-    }
 
     /**
      * @covers Phoole\Logger\Handler\HandlerAbstract::__construct()
@@ -62,5 +43,25 @@ class HandlerAbstractTest extends TestCase
     {
         $this->expectOutputString('test');
         $this->obj->handle(new LogEntry('test'));
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->obj = new myHandler();
+        $this->ref = new \ReflectionClass(get_class($this->obj));
+    }
+
+    protected function tearDown(): void
+    {
+        $this->obj = $this->ref = NULL;
+        parent::tearDown();
+    }
+
+    protected function invokeMethod($methodName, array $parameters = array())
+    {
+        $method = $this->ref->getMethod($methodName);
+        $method->setAccessible(TRUE);
+        return $method->invokeArgs($this->obj, $parameters);
     }
 }

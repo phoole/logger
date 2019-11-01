@@ -54,13 +54,13 @@ class SyslogHandler extends HandlerAbstract
      * @access protected
      */
     protected $priorities = [
-        LogLevel::DEBUG     => LOG_DEBUG,
-        LogLevel::INFO      => LOG_INFO,
-        LogLevel::NOTICE    => LOG_NOTICE,
-        LogLevel::WARNING   => LOG_WARNING,
-        LogLevel::ERROR     => LOG_ERR,
-        LogLevel::CRITICAL  => LOG_CRIT,
-        LogLevel::ALERT     => LOG_ALERT,
+        LogLevel::DEBUG => LOG_DEBUG,
+        LogLevel::INFO => LOG_INFO,
+        LogLevel::NOTICE => LOG_NOTICE,
+        LogLevel::WARNING => LOG_WARNING,
+        LogLevel::ERROR => LOG_ERR,
+        LogLevel::CRITICAL => LOG_CRIT,
+        LogLevel::ALERT => LOG_ALERT,
         LogLevel::EMERGENCY => LOG_EMERG,
     ];
 
