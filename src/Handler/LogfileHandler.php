@@ -7,10 +7,13 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
+use Throwable;
+use Exception;
+use LogicException;
 use Phoole\Logger\Formatter\FormatterInterface;
 
 /**
@@ -23,30 +26,28 @@ class LogfileHandler extends StreamHandler
     /**
      * file rotation type
      *
-     * @var    const
+     * @const int
      */
-    const ROTATE_NONE =  0; // do not rotate
-    const ROTATE_DATE =  1; // rotate by date
+    const ROTATE_NONE = 0; // do not rotate
+    const ROTATE_DATE = 1; // rotate by date
 
     /**
      * Constructor
      *
-     * @param  string $path full path
-     * @param  int $rotate rotate type
+     * @param  string             $path    full path
+     * @param  int                $rotate  rotate type
      * @param  FormatterInterface $formatter
-     * @throws \LogicException if path not writable
+     * @throws LogicException if path not writable
      */
     public function __construct(
         string $path,
         int $rotate = self::ROTATE_NONE,
-        FormatterInterface $formatter = null
+        ?FormatterInterface $formatter = NULL
     ) {
         $this->checkPath($path);
-
         if (file_exists($path)) {
             $this->doRotation($path, $rotate);
         }
-
         parent::__construct($path, $formatter);
     }
 
@@ -54,20 +55,20 @@ class LogfileHandler extends StreamHandler
      * Check file path
      *
      * @param  string $path
-     * @throws \LogicException if directory failure etc.
+     * @throws LogicException if directory failure etc.
      */
     protected function checkPath(string $path)
     {
         try {
             $dir = dirname($path);
             if (!is_dir($dir)) {
-                mkdir($dir, 0777, true);
+                mkdir($dir, 0777, TRUE);
             }
             if (!is_dir($dir) || !is_writable($dir)) {
-                throw new \Exception("unable to write to $path");
+                throw new Exception("unable to write to $path");
             }
-        } catch (\Throwable $e) {
-            throw new \LogicException($e->getMessage());
+        } catch (Throwable $e) {
+            throw new LogicException($e->getMessage());
         }
     }
 
@@ -75,7 +76,7 @@ class LogfileHandler extends StreamHandler
      * Rotate file on start
      *
      * @param  string $path
-     * @param  int $type
+     * @param  int    $type
      * @return bool
      */
     protected function doRotation(string $path, int $type): bool
@@ -86,7 +87,7 @@ class LogfileHandler extends StreamHandler
                 return $this->rotateByDate($path);
             // no rotation
             default:
-                return true;
+                return TRUE;
         }
     }
 
@@ -94,7 +95,7 @@ class LogfileHandler extends StreamHandler
      * Rotate $path to $path_20160616
      *
      * @param  string $path
-     * @param  string $format date format
+     * @param  string $format  date format
      * @return bool
      */
     protected function rotateByDate(string $path, string $format = 'Ymd'): bool
@@ -103,7 +104,7 @@ class LogfileHandler extends StreamHandler
         if ($time < strtotime('today')) {
             return rename($path, $path . '_' . date($format, $time));
         } else {
-            return false;
+            return FALSE;
         }
     }
 }

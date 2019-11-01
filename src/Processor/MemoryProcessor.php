@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Processor;
 
@@ -23,8 +23,8 @@ class MemoryProcessor extends ProcessorAbstract
      */
     protected function updateContext(array $context): array
     {
-        $context['memory_used'] = number_format(memory_get_usage(true) / 1048575, 2);
-        $context['memory_peak'] = number_format(memory_get_peak_usage(true) / 1048575, 2);
+        $context['memory_used'] = number_format(memory_get_usage(TRUE) / 1048575, 2);
+        $context['memory_peak'] = number_format(memory_get_peak_usage(TRUE) / 1048575, 2);
         return $context;
     }
 }

@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
@@ -23,7 +23,7 @@ interface HandlerInterface
     /**
      * Handle the entry and return it
      *
-     * @param  LogEntryInterface
+     * @param  LogEntryInterface $entry
      * @return LogEntryInterface
      */
     public function handle(LogEntryInterface $entry): LogEntryInterface;

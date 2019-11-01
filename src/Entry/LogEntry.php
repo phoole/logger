@@ -7,11 +7,12 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Entry;
 
 use Psr\Log\InvalidArgumentException;
+use Phoole\Logger\Processor\ProcessorInterface;
 
 /**
  * Log message
@@ -30,7 +31,7 @@ class LogEntry implements LogEntryInterface
     /**
      * @var string
      */
-    protected $level;
+    protected $level = 'info';
 
     /**
      * @var array
@@ -39,7 +40,7 @@ class LogEntry implements LogEntryInterface
 
     /**
      * @param  string $message
-     * @param  array $context
+     * @param  array  $context
      */
     public function __construct(string $message = '', array $context = [])
     {
@@ -47,18 +48,19 @@ class LogEntry implements LogEntryInterface
             $this->message = $message;
         }
         $this->context = $context;
-
         foreach ($this->getProcessors() as $processorClass) {
-            (new $processorClass())->process($this);
+            /** @var ProcessorInterface $processor */
+            $processor = new $processorClass();
+            $processor->process($this);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getMessage(): string
+    public function getProcessors(): array
     {
-        return $this->message;
+        return array();
     }
 
     /**
@@ -66,15 +68,7 @@ class LogEntry implements LogEntryInterface
      */
     public function getLevel(): string
     {
-        return (string) $this->level;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getContext(): array
-    {
-        return $this->context;
+        return $this->level;
     }
 
     /**
@@ -92,30 +86,13 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function setContext(array $context): LogEntryInterface
-    {
-        $this->context = $context;
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getProcessors(): array
-    {
-        return array();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function __toString(): string
     {
         return $this->interpolate($this->getMessage(), $this->getContext());
     }
 
     /**
-     * @param  string $message message
+     * @param  string $message  message
      * @param  array  $context
      * @return string result
      */
@@ -126,11 +103,36 @@ class LogEntry implements LogEntryInterface
             if (
                 !is_array($val) &&
                 (!is_object($val) ||
-                method_exists($val, '__toString'))
+                    method_exists($val, '__toString'))
             ) {
                 $replace['{' . $key . '}'] = $val;
             }
         }
         return strtr($message, $replace);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContext(): array
+    {
+        return $this->context;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContext(array $context): LogEntryInterface
+    {
+        $this->context = $context;
+        return $this;
     }
 }

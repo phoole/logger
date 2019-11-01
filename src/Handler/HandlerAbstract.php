@@ -7,15 +7,16 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
-use Phoole\Logger\Entry\LogEntryInterface;
-use Phoole\Logger\Formatter\DefaultFormatter;
-use Phoole\Logger\Formatter\FormatterInterface;
-use Phoole\Logger\Formatter\FormatterAwareTrait;
-use Phoole\Logger\Formatter\FormatterAwareInterface;
+use Phoole\Logger\{
+    Entry\LogEntryInterface,
+    Formatter\DefaultFormatter,
+    Formatter\FormatterInterface,
+    Formatter\FormatterAwareTrait,
+    Formatter\FormatterAwareInterface};
 
 /**
  * HandlerAbstract
@@ -29,19 +30,24 @@ abstract class HandlerAbstract implements HandlerInterface, FormatterAwareInterf
     /**
      * @param  FormatterInterface $formatter
      */
-    public function __construct(FormatterInterface $formatter = null)
+    public function __construct(?FormatterInterface $formatter = NULL)
     {
         $this->setFormatter($formatter ?? new DefaultFormatter());
     }
 
     /**
      * Destructor
-     *
-     * @access public
      */
     public function __destruct()
     {
         $this->close();
+    }
+
+    /**
+     * Close the handler
+     */
+    protected function close()
+    {
     }
 
     /**
@@ -62,14 +68,7 @@ abstract class HandlerAbstract implements HandlerInterface, FormatterAwareInterf
      */
     protected function isHandling(): bool
     {
-        return true;
-    }
-
-    /**
-     * Close the handler
-     */
-    protected function close()
-    {
+        return TRUE;
     }
 
     /**

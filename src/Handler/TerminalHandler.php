@@ -7,11 +7,11 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
-use Phoole\Logger\Entry\LogEntryInterface;
+use LogicException;
 use Phoole\Logger\Formatter\AnsiFormatter;
 use Phoole\Logger\Formatter\FormatterInterface;
 
@@ -23,15 +23,15 @@ use Phoole\Logger\Formatter\FormatterInterface;
 class TerminalHandler extends StreamHandler
 {
     /**
-     * @param  string|resource $stream
+     * @param  string|resource    $stream
      * @param  FormatterInterface $formatter
      */
     public function __construct(
         $stream = 'php://stderr',
-        FormatterInterface $formatter = null
+        ?FormatterInterface $formatter = NULL
     ) {
         if (!in_array($stream, ['php://stderr', 'php://stdout'])) {
-            throw new \LogicException("unknown stream");
+            throw new LogicException("unknown stream");
         }
         parent::__construct($stream, $formatter ?? new AnsiFormatter());
     }

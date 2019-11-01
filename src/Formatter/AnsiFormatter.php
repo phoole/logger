@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Formatter;
 
@@ -42,30 +42,28 @@ class AnsiFormatter extends DefaultFormatter
     const FGCOLOR_BRIGHT_MAGENTA = "\033[1;35m";
     const FGCOLOR_BRIGHT_CYAN    = "\033[1;36m";
     const FGCOLOR_WHITE          = "\033[1;37m";
-
     /**
      * background color
      *
      * @const
      */
-    const BGCOLOR_BLACK          = "\033[40m";
-    const BGCOLOR_RED            = "\033[41m";
-    const BGCOLOR_GREEN          = "\033[42m";
-    const BGCOLOR_YELLOW         = "\033[43m";
-    const BGCOLOR_BLUE           = "\033[44m";
-    const BGCOLOR_MAGENTA        = "\033[45m";
-    const BGCOLOR_CYAN           = "\033[46m";
-    const BGCOLOR_WHITE          = "\033[47m";
-    const DECO_BOLD              = "\033[1m";
-    const DECO_UNDERLINE         = "\033[4m";
-    const DECO_BLINK             = "\033[5m";
-    const DECO_REVERSE           = "\033[7m";
-    const DECO_CROSS             = "\033[9m";
-    const DECO_END               = "\033[0m";
+    const BGCOLOR_BLACK   = "\033[40m";
+    const BGCOLOR_RED     = "\033[41m";
+    const BGCOLOR_GREEN   = "\033[42m";
+    const BGCOLOR_YELLOW  = "\033[43m";
+    const BGCOLOR_BLUE    = "\033[44m";
+    const BGCOLOR_MAGENTA = "\033[45m";
+    const BGCOLOR_CYAN    = "\033[46m";
+    const BGCOLOR_WHITE   = "\033[47m";
+    const DECO_BOLD       = "\033[1m";
+    const DECO_UNDERLINE  = "\033[4m";
+    const DECO_BLINK      = "\033[5m";
+    const DECO_REVERSE    = "\033[7m";
+    const DECO_CROSS      = "\033[9m";
+    const DECO_END        = "\033[0m";
 
     /**
      * Color definitions for different log levels
-     *
      * format  [ fgColor, bgColor, textDeco ]
      *
      * @var     array
@@ -101,8 +99,8 @@ class AnsiFormatter extends DefaultFormatter
     protected function addColor(string $level, string $text): string
     {
         list($fgColor, $bgColor, $deColor) = $this->colors[$level];
-        $prefix  = $fgColor . $bgColor . $deColor;
-        $suffix  = $prefix ? self::DECO_END : '';
+        $prefix = $fgColor . $bgColor . $deColor;
+        $suffix = $prefix ? self::DECO_END : '';
         return $prefix . $text . $suffix;
     }
 }

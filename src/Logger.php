@@ -7,16 +7,19 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger;
 
-use Psr\Log\LoggerTrait;
-use Psr\Log\LoggerInterface;
-use Phoole\Logger\Entry\LogEntry;
-use Phoole\Logger\Entry\LogEntryInterface;
-use Phoole\Logger\Handler\HandlerAwareTrait;
-use Phoole\Logger\Handler\HandlerAwareInterface;
+use Psr\Log\{
+    LoggerTrait,
+    LoggerInterface};
+use Phoole\Logger\{
+    Entry\LogEntry,
+    Entry\LogEntryInterface,
+    Handler\HandlerInterface,
+    Handler\HandlerAwareTrait,
+    Handler\HandlerAwareInterface};
 
 /**
  * Logger
@@ -27,6 +30,11 @@ class Logger implements LoggerInterface, HandlerAwareInterface
 {
     use LoggerTrait;
     use HandlerAwareTrait;
+
+    /**
+     * @var string
+     */
+    protected $channel;
 
     /**
      * @param  string $channel
@@ -43,8 +51,7 @@ class Logger implements LoggerInterface, HandlerAwareInterface
     {
         // init the log entry
         $entry = $this->initEntry($message, $level, $context);
-        
-        // handle the entry
+        /** @var HandlerInterface $handler */
         foreach ($this->getHandlers($entry) as $handler) {
             $entry = $handler->handle($entry);
         }
@@ -52,8 +59,8 @@ class Logger implements LoggerInterface, HandlerAwareInterface
 
     /**
      * @param  LogEntryInterface|string $message
-     * @param  string $level
-     * @param  array $context
+     * @param  string                   $level
+     * @param  array                    $context
      * @return LogEntryInterface
      */
     protected function initEntry($message, string $level, array $context): LogEntryInterface
@@ -63,9 +70,7 @@ class Logger implements LoggerInterface, HandlerAwareInterface
         } else {
             $entry = new LogEntry($message);
         }
-
         $this->setChannel($context);
-
         return $entry
             ->setLevel($level)
             ->setContext(array_merge($entry->getContext(), $context));

@@ -7,12 +7,14 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
-use Phoole\Logger\Formatter\FormatterInterface;
-use Phoole\Logger\Entry\LogEntryInterface;
+use LogicException;
+use Phoole\Logger\{
+    Entry\LogEntryInterface,
+    Formatter\FormatterInterface};
 
 /**
  * @package Phoole\Logger
@@ -25,10 +27,10 @@ class StreamHandler extends HandlerAbstract
     protected $stream;
 
     /**
-     * @param  string|resource $stream
+     * @param  string|resource    $stream
      * @param  FormatterInterface $formatter
      */
-    public function __construct($stream, FormatterInterface $formatter = null)
+    public function __construct($stream, ?FormatterInterface $formatter = NULL)
     {
         $this->stream = $this->openStream($stream);
         parent::__construct($formatter);
@@ -39,12 +41,12 @@ class StreamHandler extends HandlerAbstract
      *
      * @param  string|resource $path
      * @return resource
-     * @throws \LogicException if open failure
+     * @throws LogicException if open failure
      */
     protected function openStream($path)
     {
         if (is_string($path)) {
-            if (false === strpos($path, '://')) {
+            if (FALSE === strpos($path, '://')) {
                 $path = 'file://' . $path;
             }
             return fopen($path, 'a');
@@ -52,8 +54,7 @@ class StreamHandler extends HandlerAbstract
         if (is_resource($path)) {
             return $path;
         }
-
-        throw new \LogicException("failed to open stream");
+        throw new LogicException("failed to open stream");
     }
 
     /**

@@ -7,14 +7,15 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Formatter;
 
 /**
  * FormatterAwareTrait
  *
- * @package Phoole\Logger
+ * @package   Phoole\Logger
+ * @interface FormatterAwareInterface
  */
 trait FormatterAwareTrait
 {
@@ -26,16 +27,16 @@ trait FormatterAwareTrait
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter)
+    public function getFormatter(): FormatterInterface
     {
-        $this->formatter = $formatter;
+        return $this->formatter;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getFormatter(): FormatterInterface
+    public function setFormatter(FormatterInterface $formatter)
     {
-        return $this->formatter;
+        $this->formatter = $formatter;
     }
 }

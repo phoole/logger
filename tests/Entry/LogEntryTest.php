@@ -63,7 +63,7 @@ class LogEntryTest extends TestCase
     public function testGetLevel()
     {
         // default message
-        $this->assertEquals('', $this->obj->getLevel());
+        $this->assertEquals('info', $this->obj->getLevel());
 
         $this->obj->setLevel('error');
         $this->assertEquals('error', $this->obj->getLevel());

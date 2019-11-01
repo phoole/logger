@@ -7,19 +7,21 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
-use Psr\Log\LogLevel;
-use Phoole\Logger\Entry\LogLevelTrait;
-use Phoole\Logger\Entry\LogEntryInterface;
+use Traversable;
 use Phoole\Base\Queue\UniquePriorityQueue;
+use Phoole\Logger\{
+    Entry\LogLevelTrait,
+    Entry\LogEntryInterface};
 
 /**
  * HandlerAwareTrait
  *
- * @package Phoole\Logger
+ * @package   Phoole\Logger
+ * @interface HandlerAwareInterface
  */
 trait HandlerAwareTrait
 {
@@ -28,7 +30,7 @@ trait HandlerAwareTrait
     /**
      * queue for the handlers
      *
-     * @var  HandlerInterface[]
+     * @var  HandlerInterface[][]
      */
     protected $handlers = [];
 
@@ -40,18 +42,20 @@ trait HandlerAwareTrait
         string $level,
         string $entryClass = LogEntryInterface::class,
         int $priority = 50
-    ): HandlerAwareInterface {
+    ) {
         if (!isset($this->handlers[$level][$entryClass])) {
             $this->handlers[$level][$entryClass] = new UniquePriorityQueue();
         }
-        $this->handlers[$level][$entryClass]->insert($handler, $priority);
+        /** @var UniquePriorityQueue $q */
+        $q = $this->handlers[$level][$entryClass];
+        $q->insert($handler, $priority);
         return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getHandlers(LogEntryInterface $entry): \Traversable
+    public function getHandlers(LogEntryInterface $entry): Traversable
     {
         $queue = new UniquePriorityQueue();
         $level = $entry->getLevel();
@@ -60,8 +64,8 @@ trait HandlerAwareTrait
             if (!$this->matchLevel($level, $l)) {
                 continue;
             }
-
             // match class
+            /** @var  UniquePriorityQueue $q */
             foreach ($qs as $class => $q) {
                 if (is_a($entry, $class)) {
                     $queue = $queue->combine($q);
@@ -81,8 +85,8 @@ trait HandlerAwareTrait
     protected function matchLevel(string $entryLevel, string $handlerLevel): bool
     {
         if ($this->convert[$entryLevel] >= $this->convert[$handlerLevel]) {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
 }
