@@ -9,3 +9,6 @@ vendor
 # phpunit files
 phpunit.phar
 .phpunit.result.cache
+
+# phpstorm
+.idea
