@@ -11,12 +11,11 @@ declare(strict_types = 1);
 
 namespace Phoole\Logger\Handler;
 
-use Phoole\Logger\{
-    Entry\LogEntryInterface,
-    Formatter\DefaultFormatter,
-    Formatter\FormatterInterface,
-    Formatter\FormatterAwareTrait,
-    Formatter\FormatterAwareInterface};
+use Phoole\Logger\Entry\LogEntryInterface;
+use Phoole\Logger\Formatter\DefaultFormatter;
+use Phoole\Logger\Formatter\FormatterInterface;
+use Phoole\Logger\Formatter\FormatterAwareTrait;
+use Phoole\Logger\Formatter\FormatterAwareInterface;
 
 /**
  * HandlerAbstract

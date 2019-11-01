@@ -2,7 +2,7 @@
     "name": "phoole/logger",
     "type": "library",
     "license": "Apache-2.0",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Simple & slim PSR-3 logger for PHP",
     "keywords": ["phoole", "library", "php", "logger", "psr-3", "swoole"],
     "authors": [

@@ -11,15 +11,13 @@ declare(strict_types = 1);
 
 namespace Phoole\Logger;
 
-use Psr\Log\{
-    LoggerTrait,
-    LoggerInterface};
-use Phoole\Logger\{
-    Entry\LogEntry,
-    Entry\LogEntryInterface,
-    Handler\HandlerInterface,
-    Handler\HandlerAwareTrait,
-    Handler\HandlerAwareInterface};
+use Psr\Log\LoggerTrait;
+use Psr\Log\LoggerInterface;
+use Phoole\Logger\Entry\LogEntry;
+use Phoole\Logger\Entry\LogEntryInterface;
+use Phoole\Logger\Handler\HandlerInterface;
+use Phoole\Logger\Handler\HandlerAwareTrait;
+use Phoole\Logger\Handler\HandlerAwareInterface;
 
 /**
  * Logger

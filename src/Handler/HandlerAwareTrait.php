@@ -12,10 +12,9 @@ declare(strict_types = 1);
 namespace Phoole\Logger\Handler;
 
 use Traversable;
+use Phoole\Logger\Entry\LogLevelTrait;
 use Phoole\Base\Queue\UniquePriorityQueue;
-use Phoole\Logger\{
-    Entry\LogLevelTrait,
-    Entry\LogEntryInterface};
+use Phoole\Logger\Entry\LogEntryInterface;
 
 /**
  * HandlerAwareTrait

@@ -12,9 +12,8 @@ declare(strict_types = 1);
 namespace Phoole\Logger\Handler;
 
 use LogicException;
-use Phoole\Logger\{
-    Entry\LogEntryInterface,
-    Formatter\FormatterInterface};
+use Phoole\Logger\Entry\LogEntryInterface;
+use Phoole\Logger\Formatter\FormatterInterface;
 
 /**
  * @package Phoole\Logger
