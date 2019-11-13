@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -20,25 +20,6 @@ class FormatterAwareTraitTest extends TestCase
 
     private $ref;
 
-    /**
-     * @covers Phoole\Logger\Formatter\FormatterAwareTrait::setFormatter()
-     */
-    public function testSetFormatter()
-    {
-        $f = new DefaultFormatter;
-        $this->obj->setFormatter($f);
-        $this->assertTrue($f === $this->obj->getFormatter());
-    }
-
-    /**
-     * @covers Phoole\Logger\Formatter\FormatterAwareTrait::getFormatter()
-     */
-    public function testGetFormatter()
-    {
-        $this->expectExceptionMessage('null');
-        $this->obj->getFormatter();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -57,5 +38,24 @@ class FormatterAwareTraitTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Formatter\FormatterAwareTrait::setFormatter()
+     */
+    public function testSetFormatter()
+    {
+        $f = new DefaultFormatter;
+        $this->obj->setFormatter($f);
+        $this->assertTrue($f === $this->obj->getFormatter());
+    }
+
+    /**
+     * @covers Phoole\Logger\Formatter\FormatterAwareTrait::getFormatter()
+     */
+    public function testGetFormatter()
+    {
+        $this->expectExceptionMessage('null');
+        $this->obj->getFormatter();
     }
 }

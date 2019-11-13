@@ -7,27 +7,33 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Entry;
 
 use Phoole\Logger\Processor\MemoryProcessor;
 
 /**
- * Log system related message.
+ * A log entry with predefined message template to log memory usage
+ *
  * ```php
+ * // initiate log with app id
  * $log = new Logger('MyApp');
+ *
+ * // add handler to this MemoryInfo
  * $log->addHandler(
- *     new LogfileHandler('system.log'),
  *     LogLevel::INFO,
- *     SystemLog::class
+ *     new LogfileHandler('system.log'),
+ *     MemoryInfo::class
  * );
- * $log->info(new SystemLog());
+ *
+ * // use it
+ * $log->info(new MemoryInfo());
  * ```
  *
  * @package Phoole\Logger
  */
-class SystemLog extends LogEntry
+class MemoryInfo extends LogEntry
 {
     /**
      * default message template
@@ -39,10 +45,10 @@ class SystemLog extends LogEntry
     /**
      * {@inheritDoc}
      */
-    public function getProcessors(): array
+    protected static function classProcessors(): array
     {
-        return array_merge(
-            parent::getProcessors(), [MemoryProcessor::class]
-        );
+        return [
+            new MemoryProcessor()
+        ];
     }
 }

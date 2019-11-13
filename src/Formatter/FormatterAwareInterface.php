@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Formatter;
 
@@ -20,7 +20,7 @@ interface FormatterAwareInterface
 {
     /**
      * @param  FormatterInterface
-     * @return void
+     * @return $this
      */
     public function setFormatter(FormatterInterface $formatter);
 

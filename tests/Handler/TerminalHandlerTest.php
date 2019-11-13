@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -12,16 +12,6 @@ class TerminalHandlerTest extends TestCase
     private $obj;
 
     private $ref;
-
-    /**
-     * @covers Phoole\Logger\Handler\TerminalHandler::__construct()
-     */
-    public function testConstruct()
-    {
-        $obj1 = new TerminalHandler('php://stdout');
-        $this->expectExceptionMessage('unknown stream');
-        $obj2 = new TerminalHandler('test');
-    }
 
     protected function setUp(): void
     {
@@ -41,5 +31,15 @@ class TerminalHandlerTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\TerminalHandler::__construct()
+     */
+    public function testConstruct()
+    {
+        $obj1 = new TerminalHandler('php://stdout');
+        $this->expectExceptionMessage('unknown stream');
+        $obj2 = new TerminalHandler('test');
     }
 }

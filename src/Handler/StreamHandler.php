@@ -7,11 +7,10 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Handler;
 
-use LogicException;
 use Phoole\Logger\Entry\LogEntryInterface;
 use Phoole\Logger\Formatter\FormatterInterface;
 
@@ -40,7 +39,7 @@ class StreamHandler extends HandlerAbstract
      *
      * @param  string|resource $path
      * @return resource
-     * @throws LogicException if open failure
+     * @throws \LogicException if open failure
      */
     protected function openStream($path)
     {
@@ -53,7 +52,7 @@ class StreamHandler extends HandlerAbstract
         if (is_resource($path)) {
             return $path;
         }
-        throw new LogicException("failed to open stream");
+        throw new \LogicException("failed to open stream");
     }
 
     /**
@@ -63,6 +62,7 @@ class StreamHandler extends HandlerAbstract
     {
         if ($this->stream) {
             fclose($this->stream);
+            $this->stream = FALSE;
         }
     }
 

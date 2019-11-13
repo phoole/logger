@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Processor;
 
@@ -18,12 +18,14 @@ use Phoole\Logger\Entry\LogEntryInterface;
  *
  * @package Phoole\Logger
  */
-abstract class ProcessorAbstract implements ProcessorInterface
+abstract class ProcessorAbstract
 {
     /**
-     * {@inheritDoc}
+     * make it an invokable
+     *
+     * @param  LogEntryInterface $entry
      */
-    public function process(LogEntryInterface $entry)
+    public function __invoke(LogEntryInterface $entry)
     {
         $context = $entry->getContext();
         $entry->setContext($this->updateContext($context));
@@ -31,6 +33,14 @@ abstract class ProcessorAbstract implements ProcessorInterface
 
     /**
      * update info in the $context
+     *
+     * ```php
+     * protected function updateContext(array $context): array
+     * {
+     *     $context['bingo'] = 'wow';
+     *     return $context;
+     * }
+     * ```
      *
      * @param  array $context
      * @return array

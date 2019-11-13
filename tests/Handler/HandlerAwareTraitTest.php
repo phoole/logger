@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
 use Psr\Log\LogLevel;
 use PHPUnit\Framework\TestCase;
 use Phoole\Logger\Entry\LogEntry;
-use Phoole\Logger\Entry\SystemLog;
+use Phoole\Logger\Entry\MemoryInfo;
 use Phoole\Logger\Handler\LogfileHandler;
 use Phoole\Logger\Handler\HandlerAwareTrait;
 use Phoole\Logger\Handler\HandlerAwareInterface;
@@ -27,54 +27,6 @@ class HandlerAwareTraitTest extends TestCase
 
     private $ref;
 
-    /**
-     * @covers Phoole\Logger\Handler\HandlerAwareTrait::addHandler()
-     */
-    public function testAddHandler()
-    {
-        $filelog = new LogfileHandler($this->file);
-        $this->obj->addHandler(
-            $filelog,
-            LogLevel::ERROR
-        );
-
-        $m = (new LogEntry())->setLevel(LogLevel::INFO);
-        $h = $this->obj->getHandlers($m);
-        $this->assertEquals(0, count($h));
-
-        $m = (new LogEntry())->setLevel(LogLevel::ERROR);
-        $h = $this->obj->getHandlers($m);
-        $this->assertEquals(1, count($h));
-    }
-
-    /**
-     * @covers Phoole\Logger\Handler\HandlerAwareTrait::getHandlers()
-     */
-    public function testGetHandlers()
-    {
-        $file = new LogfileHandler($this->file);
-        $file2 = new LogfileHandler($this->file2);
-
-        $this->obj->addHandler(
-            $file,
-            LogLevel::INFO
-        );
-
-        $this->obj->addHandler(
-            $file2,
-            LogLevel::ERROR,
-            SystemLog::class
-        );
-
-        $m = (new LogEntry())->setLevel(LogLevel::ALERT);
-        $h = $this->obj->getHandlers($m);
-        $this->assertEquals(1, count($h));
-
-        $m = (new SystemLog())->setLevel(LogLevel::ALERT);
-        $h = $this->obj->getHandlers($m);
-        $this->assertEquals(2, count($h));
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -86,8 +38,12 @@ class HandlerAwareTraitTest extends TestCase
 
     protected function tearDown(): void
     {
-        //@unlink($this->file);
-        //@unlink($this->file2);
+        if (\file_exists($this->file)) {
+            unlink($this->file);
+        }
+        if (\file_exists($this->file2)) {
+            unlink($this->file2);
+        }
         $this->obj = $this->ref = NULL;
         parent::tearDown();
     }
@@ -97,5 +53,47 @@ class HandlerAwareTraitTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\HandlerAwareTrait::addHandler()
+     */
+    public function testAddHandler()
+    {
+        $filelog = new LogfileHandler($this->file);
+        $this->obj->addHandler(LogLevel::ERROR, $filelog);
+
+        $m = (new LogEntry())->setLevel(LogLevel::INFO);
+        $h = $this->invokeMethod('getHandlers', [$m]);
+        $this->assertEquals(0, count($h));
+
+        $m = (new LogEntry())->setLevel(LogLevel::ERROR);
+        $h = $this->invokeMethod('getHandlers', [$m]);
+        $this->assertEquals(1, count($h));
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\HandlerAwareTrait::getHandlers()
+     */
+    public function testGetHandlers()
+    {
+        $file = new LogfileHandler($this->file);
+        $file2 = new LogfileHandler($this->file2);
+
+        $this->obj->addHandler(LogLevel::INFO, $file);
+
+        $this->obj->addHandler(
+            LogLevel::ERROR,
+            $file2,
+            MemoryInfo::class
+        );
+
+        $m = (new LogEntry())->setLevel(LogLevel::ALERT);
+        $h = $this->invokeMethod('getHandlers', [$m]);
+        $this->assertEquals(1, count($h));
+
+        $m = (new MemoryInfo())->setLevel(LogLevel::ALERT);
+        $h = $this->invokeMethod('getHandlers', [$m]);
+        $this->assertEquals(2, count($h));
     }
 }

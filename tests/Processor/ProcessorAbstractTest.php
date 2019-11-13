@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -23,39 +23,6 @@ class ProcessorAbstractTest extends TestCase
 
     private $ref;
 
-    /**
-     * @covers Phoole\Logger\Processor\ProcessorAbstract::updateContext()
-     */
-    public function testUpdateContext()
-    {
-        $a = [];
-        $b = $this->invokeMethod('updateContext', [$a]);
-        $this->assertEquals(
-            ['test' => 'bingo'],
-            $b
-        );
-    }
-
-    protected function invokeMethod($methodName, array $parameters = array())
-    {
-        $method = $this->ref->getMethod($methodName);
-        $method->setAccessible(TRUE);
-        return $method->invokeArgs($this->obj, $parameters);
-    }
-
-    /**
-     * @covers Phoole\Logger\Processor\ProcessorAbstract::process()
-     */
-    public function testProcess()
-    {
-        $m = new LogEntry('test', ['a' => 'a']);
-        $this->obj->process($m);
-        $this->assertEquals(
-            ['a' => 'a', 'test' => 'bingo'],
-            $m->getContext()
-        );
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -67,5 +34,40 @@ class ProcessorAbstractTest extends TestCase
     {
         $this->obj = $this->ref = NULL;
         parent::tearDown();
+    }
+
+    protected function invokeMethod($methodName, array $parameters = array())
+    {
+        $method = $this->ref->getMethod($methodName);
+        $method->setAccessible(TRUE);
+        return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Processor\ProcessorAbstract::__invoke()
+     */
+    public function testInvoke()
+    {
+        $m = new LogEntry('test', ['a' => 'a']);
+        $callable = $this->obj;
+        $callable($m);
+
+        $this->assertEquals(
+            ['a' => 'a', 'test' => 'bingo'],
+            $m->getContext()
+        );
+    }
+
+    /**
+     * @covers Phoole\Logger\Processor\ProcessorAbstract::updateContext()
+     */
+    public function testUpdateContext()
+    {
+        $a = [];
+        $b = $this->invokeMethod('updateContext', [$a]);
+        $this->assertEquals(
+            ['test' => 'bingo'],
+            $b
+        );
     }
 }

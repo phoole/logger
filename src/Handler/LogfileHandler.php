@@ -7,13 +7,10 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Handler;
 
-use Throwable;
-use Exception;
-use LogicException;
 use Phoole\Logger\Formatter\FormatterInterface;
 
 /**
@@ -35,14 +32,14 @@ class LogfileHandler extends StreamHandler
      * Constructor
      *
      * @param  string             $path    full path
-     * @param  int                $rotate  rotate type
      * @param  FormatterInterface $formatter
-     * @throws LogicException if path not writable
+     * @param  int                $rotate  rotate type
+     * @throws \LogicException if path not writable
      */
     public function __construct(
         string $path,
-        int $rotate = self::ROTATE_NONE,
-        ?FormatterInterface $formatter = NULL
+        ?FormatterInterface $formatter = NULL,
+        int $rotate = self::ROTATE_NONE
     ) {
         $this->checkPath($path);
         if (file_exists($path)) {
@@ -55,7 +52,7 @@ class LogfileHandler extends StreamHandler
      * Check file path
      *
      * @param  string $path
-     * @throws LogicException if directory failure etc.
+     * @throws \LogicException if directory failure etc.
      */
     protected function checkPath(string $path)
     {
@@ -65,10 +62,10 @@ class LogfileHandler extends StreamHandler
                 mkdir($dir, 0777, TRUE);
             }
             if (!is_dir($dir) || !is_writable($dir)) {
-                throw new Exception("unable to write to $path");
+                throw new \Exception("unable to write to $path");
             }
-        } catch (Throwable $e) {
-            throw new LogicException($e->getMessage());
+        } catch (\Throwable $e) {
+            throw new \LogicException($e->getMessage());
         }
     }
 

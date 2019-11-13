@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -15,6 +15,28 @@ class LogfileHandlerTest extends TestCase
     private $obj;
 
     private $ref;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->file = sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'logfileTest';
+        $this->obj = new LogfileHandler($this->file);
+        $this->ref = new \ReflectionClass(get_class($this->obj));
+    }
+
+    protected function tearDown(): void
+    {
+        unlink($this->file);
+        $this->obj = $this->ref = NULL;
+        parent::tearDown();
+    }
+
+    protected function invokeMethod($methodName, array $parameters = array())
+    {
+        $method = $this->ref->getMethod($methodName);
+        $method->setAccessible(TRUE);
+        return $method->invokeArgs($this->obj, $parameters);
+    }
 
     /**
      * @covers Phoole\Logger\Handler\LogfileHandler::__construct()
@@ -40,38 +62,17 @@ class LogfileHandlerTest extends TestCase
         unlink($new);
     }
 
-    protected function invokeMethod($methodName, array $parameters = array())
-    {
-        $method = $this->ref->getMethod($methodName);
-        $method->setAccessible(TRUE);
-        return $method->invokeArgs($this->obj, $parameters);
-    }
-
     /**
-     * @covers Phoole\Logger\Handler\LogfileHandler::handle()
+     * @covers Phoole\Logger\Handler\LogfileHandler::__invoke()
      */
-    public function testHandle()
+    public function testInvoke()
     {
         $m = new LogEntry('test');
-        $this->obj->handle($m);
+        $handler = $this->obj;
+        $handler($m);
         $this->assertEquals(
-            'test',
+            'INFO: test',
             trim(file_get_contents($this->file))
         );
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->file = sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'logfileTest';
-        $this->obj = new LogfileHandler($this->file);
-        $this->ref = new \ReflectionClass(get_class($this->obj));
-    }
-
-    protected function tearDown(): void
-    {
-        unlink($this->file);
-        $this->obj = $this->ref = NULL;
-        parent::tearDown();
     }
 }

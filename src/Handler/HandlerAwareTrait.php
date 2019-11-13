@@ -7,14 +7,14 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Handler;
 
-use Traversable;
 use Phoole\Logger\Entry\LogLevelTrait;
 use Phoole\Base\Queue\UniquePriorityQueue;
 use Phoole\Logger\Entry\LogEntryInterface;
+use Phoole\Logger\Processor\VerifyCallableTrait;
 
 /**
  * HandlerAwareTrait
@@ -25,45 +25,94 @@ use Phoole\Logger\Entry\LogEntryInterface;
 trait HandlerAwareTrait
 {
     use LogLevelTrait;
+    use VerifyCallableTrait;
 
     /**
      * queue for the handlers
      *
-     * @var  HandlerInterface[][]
+     * @var  UniquePriorityQueue[][]
      */
     protected $handlers = [];
+
+    /**
+     * @var array
+     */
+    protected $handlerCache = [];
 
     /**
      * {@inheritDoc}
      */
     public function addHandler(
-        HandlerInterface $handler,
         string $level,
-        string $entryClass = LogEntryInterface::class,
+        callable $handler,
+        $entryClass = LogEntryInterface::class,
         int $priority = 50
     ) {
-        if (!isset($this->handlers[$level][$entryClass])) {
-            $this->handlers[$level][$entryClass] = new UniquePriorityQueue();
-        }
-        /** @var UniquePriorityQueue $q */
-        $q = $this->handlers[$level][$entryClass];
+        // verify parameters
+        $requiredClass = self::verifyCallable($handler, LogEntryInterface::class);
+        $entryClass = $this->checkEntry($entryClass, $requiredClass);
+
+        // add handler
+        $q = $this->handlers[$level][$entryClass] ?? new UniquePriorityQueue();
         $q->insert($handler, $priority);
+        $this->handlers[$level][$entryClass] = $q;
+
+        // clear cache
+        $this->handlerCache = [];
+
         return $this;
     }
 
     /**
-     * {@inheritDoc}
+     * Get handlers handling $level and $entry type
+     *
+     * @param  LogEntryInterface $entry
+     * @return \Traversable
      */
-    public function getHandlers(LogEntryInterface $entry): Traversable
+    protected function getHandlers(LogEntryInterface $entry): \Traversable
+    {
+        // check cache
+        $level = $entry->getLevel();
+        if (isset($this->handlerCache[$level][\get_class($entry)])) {
+            return $this->handlerCache[$level][\get_class($entry)];
+        }
+
+        // find matching handlers
+        $queue = $this->findHandlers($entry, $level);
+
+        // update cache
+        $this->handlerCache[$level][\get_class($entry)] = $queue;
+
+        return $queue;
+    }
+
+    /**
+     * @param  string|object $entryClass
+     * @param  string        $requiredClass
+     * @return string
+     * @throws \InvalidArgumentException if not valid message entry
+     */
+    protected function checkEntry($entryClass, string $requiredClass): string
+    {
+        if (!\is_a($entryClass, $requiredClass, TRUE)) {
+            throw new \InvalidArgumentException("not a valid entry " . $requiredClass);
+        }
+        return \is_string($entryClass) ? $entryClass : \get_class($entryClass);
+    }
+
+    /**
+     * @param  LogEntryInterface $entry
+     * @param  string            $level
+     * @return UniquePriorityQueue
+     */
+    protected function findHandlers(LogEntryInterface $entry, string $level): UniquePriorityQueue
     {
         $queue = new UniquePriorityQueue();
-        $level = $entry->getLevel();
         foreach ($this->handlers as $l => $qs) {
-            // match level
             if (!$this->matchLevel($level, $l)) {
                 continue;
             }
-            // match class
+
             /** @var  UniquePriorityQueue $q */
             foreach ($qs as $class => $q) {
                 if (is_a($entry, $class)) {

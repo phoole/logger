@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -13,19 +13,6 @@ class MemoryProcessorTest extends TestCase
     private $obj;
 
     private $ref;
-
-    /**
-     * @covers Phoole\Logger\Processor\MemoryProcessor::process()
-     */
-    public function testProcess()
-    {
-        $m = new LogEntry('test', ['a' => 'a']);
-        $this->obj->process($m);
-        $b = $m->getContext();
-        $this->assertEquals(3, count($b));
-        $this->assertTrue(isset($b['memory_used']));
-        $this->assertTrue(isset($b['memory_peak']));
-    }
 
     protected function setUp(): void
     {
@@ -45,5 +32,20 @@ class MemoryProcessorTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Processor\MemoryProcessor::process()
+     */
+    public function testProcess()
+    {
+        $m = new LogEntry('test', ['a' => 'a']);
+        $callable = $this->obj;
+        $callable($m);
+
+        $b = $m->getContext();
+        $this->assertEquals(3, count($b));
+        $this->assertTrue(isset($b['memory_used']));
+        $this->assertTrue(isset($b['memory_peak']));
     }
 }

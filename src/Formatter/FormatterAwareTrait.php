@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Formatter;
 
@@ -38,5 +38,6 @@ trait FormatterAwareTrait
     public function setFormatter(FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
+        return $this;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -25,26 +25,6 @@ class HandlerAbstractTest extends TestCase
 
     private $ref;
 
-    /**
-     * @covers Phoole\Logger\Handler\HandlerAbstract::__construct()
-     */
-    public function testConstruct()
-    {
-        $this->assertTrue($this->obj->getFormatter() instanceof DefaultFormatter);
-
-        $obj = new myHandler(new AnsiFormatter());
-        $this->assertTrue($obj->getFormatter() instanceof AnsiFormatter);
-    }
-
-    /**
-     * @covers Phoole\Logger\Handler\HandlerAbstract::handle()
-     */
-    public function testHandle()
-    {
-        $this->expectOutputString('test');
-        $this->obj->handle(new LogEntry('test'));
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -63,5 +43,26 @@ class HandlerAbstractTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\HandlerAbstract::__construct()
+     */
+    public function testConstruct()
+    {
+        $this->assertTrue($this->obj->getFormatter() instanceof DefaultFormatter);
+
+        $obj = new myHandler(new AnsiFormatter());
+        $this->assertTrue($obj->getFormatter() instanceof AnsiFormatter);
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\HandlerAbstract::__invoke()
+     */
+    public function testInvoke()
+    {
+        $this->expectOutputString('test');
+        $handler = $this->obj;
+        $handler(new LogEntry('test'));
     }
 }

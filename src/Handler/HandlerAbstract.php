@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Handler;
 
@@ -22,7 +22,7 @@ use Phoole\Logger\Formatter\FormatterAwareInterface;
  *
  * @package Phoole\Logger
  */
-abstract class HandlerAbstract implements HandlerInterface, FormatterAwareInterface
+abstract class HandlerAbstract implements FormatterAwareInterface
 {
     use FormatterAwareTrait;
 
@@ -43,31 +43,31 @@ abstract class HandlerAbstract implements HandlerInterface, FormatterAwareInterf
     }
 
     /**
-     * Close the handler
+     * @param  LogEntryInterface $entry
+     */
+    public function __invoke(LogEntryInterface $entry)
+    {
+        if ($this->isHandling($entry)) {
+            $this->write($entry);
+        }
+    }
+
+    /**
+     * Close the handler if wanted
      */
     protected function close()
     {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function handle(LogEntryInterface $entry): LogEntryInterface
-    {
-        if ($this->isHandling()) {
-            $this->write($entry);
-        }
-        return $entry;
-    }
-
-    /**
      * Is this handler handling this log ?
      *
+     * @param  LogEntryInterface $entry
      * @return bool
      */
-    protected function isHandling(): bool
+    protected function isHandling(LogEntryInterface $entry): bool
     {
-        return TRUE;
+        return $entry ? TRUE : TRUE;
     }
 
     /**

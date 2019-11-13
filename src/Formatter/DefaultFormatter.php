@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Formatter;
 
@@ -25,13 +25,15 @@ class DefaultFormatter implements FormatterInterface
      */
     public function format(LogEntryInterface $entry): string
     {
-        $context = $entry->getContext();
         $mesg = '';
+
+        // channel name
+        $context = $entry->getContext();
         if (isset($context['__channel'])) {
             $mesg .= '[' . strtoupper($context['__channel']) . '] ';
         }
-        $mesg .= $entry . $this->getEol();
-        return $mesg;
+
+        return $mesg . \strtoupper($entry->getLevel()) . ': ' . $entry . $this->getEol();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -13,19 +13,6 @@ class DefaultFormatterTest extends TestCase
     private $obj;
 
     private $ref;
-
-    /**
-     * @covers Phoole\Logger\Formatter\DefaultFormatter::format()
-     */
-    public function testFormatter()
-    {
-        $m = new LogEntry('test {wow}', ['__channel' => 'PHOOLE', 'wow' => 'bingo']);
-        $s = $this->obj->format($m);
-        $this->assertEquals(
-            '[PHOOLE] test bingo',
-            trim($s)
-        );
-    }
 
     protected function setUp(): void
     {
@@ -45,5 +32,18 @@ class DefaultFormatterTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Formatter\DefaultFormatter::format()
+     */
+    public function testFormatter()
+    {
+        $m = new LogEntry('test {wow}', ['__channel' => 'PHOOLE', 'wow' => 'bingo']);
+        $s = $this->obj->format($m);
+        $this->assertEquals(
+            '[PHOOLE] INFO: test bingo',
+            trim($s)
+        );
     }
 }

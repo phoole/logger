@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -13,17 +13,6 @@ class AnsiFormatterTest extends TestCase
     private $obj;
 
     private $ref;
-
-    /**
-     * @covers Phoole\Logger\Formatter\AnsiFormatter::format()
-     */
-    public function testFormatter()
-    {
-        $m = new LogEntry('test {wow}', ['__channel' => 'PHOOLE', 'wow' => 'bingo']);
-        $m->setLevel('error');
-        $this->expectOutputRegex('/test bingo/');
-        echo $this->obj->format($m);
-    }
 
     protected function setUp(): void
     {
@@ -43,5 +32,16 @@ class AnsiFormatterTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Formatter\AnsiFormatter::format()
+     */
+    public function testFormatter()
+    {
+        $m = new LogEntry('test {wow}', ['__channel' => 'PHOOLE', 'wow' => 'bingo']);
+        $m->setLevel('error');
+        $this->expectOutputRegex('/test bingo/');
+        echo $this->obj->format($m);
     }
 }

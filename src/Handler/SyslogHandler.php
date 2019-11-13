@@ -7,24 +7,13 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Handler;
 
-use LogicException;
 use Psr\Log\LogLevel;
 use Phoole\Logger\Entry\LogEntryInterface;
 use Phoole\Logger\Formatter\FormatterInterface;
-use const LOG_PID;
-use const LOG_ERR;
-use const LOG_USER;
-use const LOG_CRIT;
-use const LOG_INFO;
-use const LOG_EMERG;
-use const LOG_ALERT;
-use const LOG_DEBUG;
-use const LOG_NOTICE;
-use const LOG_WARNING;
 
 /**
  * log to syslog on UNIX type system
@@ -54,14 +43,14 @@ class SyslogHandler extends HandlerAbstract
      * @access protected
      */
     protected $priorities = [
-        LogLevel::DEBUG => LOG_DEBUG,
-        LogLevel::INFO => LOG_INFO,
-        LogLevel::NOTICE => LOG_NOTICE,
-        LogLevel::WARNING => LOG_WARNING,
-        LogLevel::ERROR => LOG_ERR,
-        LogLevel::CRITICAL => LOG_CRIT,
-        LogLevel::ALERT => LOG_ALERT,
-        LogLevel::EMERGENCY => LOG_EMERG,
+        LogLevel::DEBUG => \LOG_DEBUG,
+        LogLevel::INFO => \LOG_INFO,
+        LogLevel::NOTICE => \LOG_NOTICE,
+        LogLevel::WARNING => \LOG_WARNING,
+        LogLevel::ERROR => \LOG_ERR,
+        LogLevel::CRITICAL => \LOG_CRIT,
+        LogLevel::ALERT => \LOG_ALERT,
+        LogLevel::EMERGENCY => \LOG_EMERG,
     ];
 
     /**
@@ -70,8 +59,8 @@ class SyslogHandler extends HandlerAbstract
      * @param  FormatterInterface $formatter
      */
     public function __construct(
-        int $facility = LOG_USER,
-        int $logOpts = LOG_PID,
+        int $facility = \LOG_USER,
+        int $logOpts = \LOG_PID,
         ?FormatterInterface $formatter = NULL
     ) {
         $this->facility = $facility;
@@ -87,7 +76,7 @@ class SyslogHandler extends HandlerAbstract
         $context = $entry->getContext();
         $ident = $context['__channel'] ?? 'LOG';
         if (!openlog($ident, $this->logopts, $this->facility)) {
-            throw new LogicException("openlog() failed");
+            throw new \LogicException("openlog() failed");
         }
         syslog(
             $this->priorities[$entry->getLevel()],

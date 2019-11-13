@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -13,14 +13,34 @@ class LogEntryTest extends TestCase
 
     private $ref;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->obj = new LogEntry();
+        $this->ref = new \ReflectionClass(get_class($this->obj));
+    }
+
+    protected function tearDown(): void
+    {
+        $this->obj = $this->ref = NULL;
+        parent::tearDown();
+    }
+
+    protected function invokeMethod($methodName, array $parameters = array())
+    {
+        $method = $this->ref->getMethod($methodName);
+        $method->setAccessible(TRUE);
+        return $method->invokeArgs($this->obj, $parameters);
+    }
+
     /**
      * @covers Phoole\Logger\Entry\LogEntry::__construct()
      */
     public function testConstruct()
     {
-        $obj = new LogEntry('new {msg}', ['msg' => 'message']);
+        $obj = new LogEntry('new {msg} {msg}', ['msg' => 'message']);
         $this->assertEquals(
-            'new message',
+            'new message message',
             (string) $obj
         );
     }
@@ -65,14 +85,6 @@ class LogEntryTest extends TestCase
     }
 
     /**
-     * @covers Phoole\Logger\Entry\LogEntry::getProcessors()
-     */
-    public function testGetProcessors()
-    {
-        $this->assertEquals([], $this->obj->getProcessors());
-    }
-
-    /**
      * @covers Phoole\Logger\Entry\LogEntry::__toString()
      */
     public function testToString()
@@ -95,25 +107,5 @@ class LogEntryTest extends TestCase
             'string is log message',
             $this->invokeMethod('interpolate', [$message, $context])
         );
-    }
-
-    protected function invokeMethod($methodName, array $parameters = array())
-    {
-        $method = $this->ref->getMethod($methodName);
-        $method->setAccessible(TRUE);
-        return $method->invokeArgs($this->obj, $parameters);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->obj = new LogEntry();
-        $this->ref = new \ReflectionClass(get_class($this->obj));
-    }
-
-    protected function tearDown(): void
-    {
-        $this->obj = $this->ref = NULL;
-        parent::tearDown();
     }
 }

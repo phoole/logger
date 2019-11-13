@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Tests;
 
@@ -15,27 +15,6 @@ class StreamHandlerTest extends TestCase
     private $obj;
 
     private $ref;
-
-    /**
-     * @covers Phoole\Logger\Handler\StreamHandler::__construct()
-     */
-    public function testConstruct()
-    {
-        $this->assertTrue(file_exists($this->file));
-    }
-
-    /**
-     * @covers Phoole\Logger\Handler\StreamHandler::handle()
-     */
-    public function testHandle()
-    {
-        $m = new LogEntry('test');
-        $this->obj->handle($m);
-        $this->assertEquals(
-            'test',
-            trim(file_get_contents($this->file))
-        );
-    }
 
     protected function setUp(): void
     {
@@ -57,5 +36,27 @@ class StreamHandlerTest extends TestCase
         $method = $this->ref->getMethod($methodName);
         $method->setAccessible(TRUE);
         return $method->invokeArgs($this->obj, $parameters);
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\StreamHandler::__construct()
+     */
+    public function testConstruct()
+    {
+        $this->assertTrue(file_exists($this->file));
+    }
+
+    /**
+     * @covers Phoole\Logger\Handler\StreamHandler::__invoke()
+     */
+    public function testInvoke()
+    {
+        $m = new LogEntry('test');
+        $handler = $this->obj;
+        $handler($m);
+        $this->assertEquals(
+            'INFO: test',
+            trim(file_get_contents($this->file))
+        );
     }
 }

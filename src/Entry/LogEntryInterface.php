@@ -7,39 +7,26 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Entry;
 
 use Psr\Log\InvalidArgumentException;
+use Phoole\Logger\Processor\ProcessorAwareInterface;
 
 /**
  * Log message
  *
  * @package Phoole\Logger
  */
-interface LogEntryInterface
+interface LogEntryInterface extends ProcessorAwareInterface
 {
     /**
-     * Get the text message
+     * Get the text message template (raw message)
      *
      * @return string
      */
     public function getMessage(): string;
-
-    /**
-     * Get the level
-     *
-     * @return string
-     */
-    public function getLevel(): string;
-
-    /**
-     * Get the context
-     *
-     * @return array
-     */
-    public function getContext(): array;
 
     /**
      * @param  string $level
@@ -47,6 +34,13 @@ interface LogEntryInterface
      * @throws InvalidArgumentException
      */
     public function setLevel(string $level);
+
+    /**
+     * Get the level
+     *
+     * @return string
+     */
+    public function getLevel(): string;
 
     /**
      * Set context
@@ -57,11 +51,11 @@ interface LogEntryInterface
     public function setContext(array $context);
 
     /**
-     * array of processor classname
+     * Get the context
      *
-     * @return string[]
+     * @return array
      */
-    public function getProcessors(): array;
+    public function getContext(): array;
 
     /**
      * @return string

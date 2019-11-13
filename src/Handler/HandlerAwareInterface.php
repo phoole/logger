@@ -7,12 +7,10 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger\Handler;
 
-use Traversable;
-use LogicException;
 use Phoole\Logger\Entry\LogEntryInterface;
 
 /**
@@ -25,25 +23,17 @@ interface HandlerAwareInterface
     /**
      * Add a handler
      *
-     * @param  HandlerInterface $handler
-     * @param  string           $level       level to handle
-     * @param  string           $entryClass  the log entry class/interface to handle
-     * @param  int              $priority    handling priority
+     * @param  string        $level       level to handle
+     * @param  callable      $handler
+     * @param  string|object $entryClass  the log entry class/interface to handle
+     * @param  int           $priority    handling priority
      * @return $this
-     * @throws LogicException              if entry class unknown etc.
+     * @throws \InvalidArgumentException  if entry class or handler not right
      */
     public function addHandler(
-        HandlerInterface $handler,
         string $level,
-        string $entryClass = LogEntryInterface::class,
+        callable $handler,
+        $entryClass = LogEntryInterface::class,
         int $priority = 50
     );
-
-    /**
-     * Get handlers handling $level and $entry type
-     *
-     * @param  LogEntryInterface $entry
-     * @return Traversable
-     */
-    public function getHandlers(LogEntryInterface $entry): Traversable;
 }

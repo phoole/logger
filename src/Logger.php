@@ -7,7 +7,7 @@
  * @package   Phoole\Logger
  * @copyright Copyright (c) 2019 Hong Zhang
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Phoole\Logger;
 
@@ -15,7 +15,6 @@ use Psr\Log\LoggerTrait;
 use Psr\Log\LoggerInterface;
 use Phoole\Logger\Entry\LogEntry;
 use Phoole\Logger\Entry\LogEntryInterface;
-use Phoole\Logger\Handler\HandlerInterface;
 use Phoole\Logger\Handler\HandlerAwareTrait;
 use Phoole\Logger\Handler\HandlerAwareInterface;
 
@@ -35,6 +34,8 @@ class Logger implements LoggerInterface, HandlerAwareInterface
     protected $channel;
 
     /**
+     * Channel usually is APP ID
+     *
      * @param  string $channel
      */
     public function __construct(string $channel)
@@ -47,12 +48,10 @@ class Logger implements LoggerInterface, HandlerAwareInterface
      */
     public function log($level, $message, array $context = array())
     {
-        // init the log entry
-        $entry = $this->initEntry($message, $level, $context);
+        $entry = ($this->initEntry($message, $level, $context))->process();
 
-        /** @var HandlerInterface $handler */
         foreach ($this->getHandlers($entry) as $handler) {
-            $entry = $handler->handle($entry);
+            $handler($entry);
         }
     }
 
@@ -61,14 +60,13 @@ class Logger implements LoggerInterface, HandlerAwareInterface
      * @param  string                   $level
      * @param  array                    $context
      * @return LogEntryInterface
+     * @throws \InvalidArgumentException if message not right
      */
     protected function initEntry($message, string $level, array $context): LogEntryInterface
     {
-        if (is_object($message) && $message instanceof LogEntryInterface) {
-            $entry = $message;
-        } else {
-            $entry = new LogEntry($message);
-        }
+        $entry = $this->validate($message);
+
+        // update channel name in context
         $this->setChannel($context);
 
         return $entry
@@ -77,6 +75,25 @@ class Logger implements LoggerInterface, HandlerAwareInterface
     }
 
     /**
+     * @param $message
+     * @return LogEntryInterface
+     * @throws \InvalidArgumentException if message not right
+     */
+    protected function validate($message): LogEntryInterface
+    {
+        if (is_string($message)) {
+            $entry = new LogEntry($message);
+        } elseif (is_object($message) && $message instanceof LogEntryInterface) {
+            $entry = $message;
+        } else {
+            throw new \InvalidArgumentException("not valid message " . (string) $message);
+        }
+        return $entry;
+    }
+
+    /**
+     * Set channel name in context
+     *
      * @param  array &$context
      */
     protected function setChannel(array &$context)
