@@ -145,10 +145,10 @@ class ProcessorAwareTraitTest extends TestCase
 
         $this->invokeMethod(
             $obj, 'addProcessor', [
-            function(A $bingo) {
-                echo 'bingo';
-            }
-        ]
+                function(A $bingo) {
+                    echo 'bingo';
+                }
+            ]
         );
         $res = $this->getPrivateProperty($obj, 'processors');
         $this->assertEquals(2, count($res[AA::class]));

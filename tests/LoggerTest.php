@@ -85,11 +85,13 @@ class LoggerTest extends TestCase
         $this->obj->addHandler(
             'warning',
             $handler,
-            MyEntry::addProcessor(function(LogEntryInterface $entry) {
-                $context = $entry->getContext();
-                $context['wow'] = 'bingo';
-                $entry->setContext($context);
-            })
+            MyEntry::addProcessor(
+                function(LogEntryInterface $entry) {
+                    $context = $entry->getContext();
+                    $context['wow'] = 'bingo';
+                    $entry->setContext($context);
+                }
+            )
         );
 
         $this->expectOutputString('my is bingo');

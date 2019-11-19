@@ -8,7 +8,7 @@
 
 [PSR-3]: http://www.php-fig.org/psr/psr-3/ "PSR-3: Logger Interface"
 
-Simple &amp; Slim [PSR-3][PSR-3] Logger for PHP. It helps to **'DELIVER CERTAIN MESSAGES TO SOMEWHERE'**
+Slim, simple and full compatible [PSR-3][PSR-3] Logger library for PHP.
 
 Installation
 ---
